@@ -160,7 +160,7 @@ flowchart LR
 La base de datos separa país, zona horaria, ubicación y observaciones meteorológicas:
 
 ```mermaid
-Diagrama de tablas
+erDiagram
     Country {
         int CountryID PK
         nvarchar CountryName UK
@@ -210,15 +210,18 @@ Diagrama de tablas
     
     
     
-    
+    Country ||--o{ Location : has
+    Timezone ||--o{ Location : uses
+    Location ||--o{ DailyWeather : contains
+    Location ||--o{ HourlyWeather : contains    
+ ```
+
 Relaciones en el modelo:
 
 - `Country[CountryID] -> Location[CountryID]`
 - `Timezone[TimezoneID] -> Location[TimezoneID]`
 - `Location[LocationID] -> DailyWeather[LocationID]`
 - `Location[LocationID] -> HourlyWeather[LocationID]`
- ```
-
 
 
 ## Requisitos
