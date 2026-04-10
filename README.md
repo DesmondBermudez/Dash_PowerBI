@@ -1,38 +1,166 @@
 # Dash BI Clima
 
-Pipeline de datos meteorológicos con `Python + SQL Server + Power BI` para consultar, almacenar y visualizar series climáticas históricas y de pronóstico desde Open-Meteo.
+Proyecto de integración de datos meteorológicos con `Python + SQL Server + Power BI` para consultar información de Open-Meteo, almacenarla en una base local y visualizarla en un dashboard analítico.
 
-## Vista General
+## Descripción
 
-Este proyecto hace tres cosas:
+El proyecto está compuesto por tres partes principales:
 
-1. Extrae datos meteorológicos desde la API de Open-Meteo.
-2. Los normaliza e inserta en una base de datos SQL Server local.
-3. Los consume desde Power BI para análisis y visualización.
+1. Un proceso ETL en Python para consumir la API de Open-Meteo.
+2. Una base de datos SQL Server para almacenar países, zonas horarias, ubicaciones y series climáticas.
+3. Un dashboard de Power BI para explorar los datos cargados.
 
-## Arquitectura
+La versión actual del ETL fue refactorizada a una estructura modular orientada a objetos, separando responsabilidades para mejorar mantenimiento, lectura y pruebas.
+
+## Arquitectura General
 
 ```mermaid
 flowchart LR
-    A[Open-Meteo API] --> B[ETL_clima.py]
-    C[locations.json] --> B
-    B --> D[WeatherBD / SQL Server]
-    D --> E[Dashboard_Clima_AD.pbix]
+    A[locations.json] --> B[ETL_clima.py]
+    B --> C[src/dash_bi]
+    C --> D[Open-Meteo API]
+    C --> E[WeatherBD / SQL Server]
+    E --> F[Dashboard_Clima_AD.pbix]
 ```
 
 ## Estructura del Proyecto
 
-- [ETL_clima.py](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/ETL_clima.py): script ETL principal.
-- [WeatherDB.sql](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/WeatherDB.sql): query para la creación de la base de datos.
-- [locations.json](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/locations.json): catálogo de ubicaciones con ciudad, país, zona horaria y coordenadas para alimentar al API.
-- [Dashboard_Clima_AD.pbix](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/Dashboard_Clima_AD.pbix): dashboard de Power BI.
+```text
+Dash_BI/
+├── Dashboard_Clima_AD.pbix
+├── ETL_clima.py
+├── README.md
+├── requirements.txt
+├── WeatherDB.sql
+├── locations.json
+├── src/
+│   └── dash_bi/
+│       ├── __init__.py
+│       ├── api/
+│       │   ├── __init__.py
+│       │   └── cliente_clima.py
+│       ├── aplicacion/
+│       │   ├── __init__.py
+│       │   └── etl_clima_app.py
+│       ├── catalogo/
+│       │   ├── __init__.py
+│       │   └── gestor_ubicaciones.py
+│       ├── config/
+│       │   ├── __init__.py
+│       │   └── gestor_argumentos.py
+│       ├── modelos/
+│       │   ├── __init__.py
+│       │   └── ubicacion_consulta.py
+│       ├── persistencia/
+│       │   ├── __init__.py
+│       │   └── cargador_sql_server.py
+│       └── transformacion/
+│           ├── __init__.py
+│           └── transformador_clima.py
+└── tests/
+    ├── __init__.py
+    ├── test_argumentos.py
+    ├── test_catalogo.py
+    ├── test_etl.py
+    └── test_transformacion.py
+```
+
+## Explicación de Módulos
+
+### Archivo principal
+
+- [ETL_clima.py](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/ETL_clima.py)
+  - Punto de entrada del proyecto.
+  - Inicializa la aplicación ETL y delega la ejecución al flujo principal.
+
+### Configuración
+
+- [gestor_argumentos.py](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/src/dash_bi/config/gestor_argumentos.py)
+  - Captura y organiza los parámetros de consola.
+  - Define opciones como `--location`, `--all-locations`, `--coordinates`, `--server` y `--request-delay`.
+
+### Catálogo de ubicaciones
+
+- [gestor_ubicaciones.py](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/src/dash_bi/catalogo/gestor_ubicaciones.py)
+  - Carga y valida el archivo `locations.json`.
+  - Resuelve ubicaciones desde catálogo o coordenadas manuales.
+  - Soporta coordenadas simples y detalladas.
+
+### Modelos
+
+- [ubicacion_consulta.py](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/src/dash_bi/modelos/ubicacion_consulta.py)
+  - Representa una ubicación lista para consultar.
+  - Contiene ciudad, país, zona horaria, latitud y longitud.
+
+### Cliente de API
+
+- [cliente_clima.py](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/src/dash_bi/api/cliente_clima.py)
+  - Construye URLs de Open-Meteo.
+  - Ejecuta las peticiones HTTP.
+  - Expone las columnas diarias y horarias utilizadas por el ETL.
+
+### Transformación
+
+- [transformador_clima.py](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/src/dash_bi/transformacion/transformador_clima.py)
+  - Convierte fechas y horas del payload.
+  - Prepara filas diarias y horarias listas para insertar en SQL Server.
+  - Divide listas en lotes para facilitar operaciones por bloques.
+
+### Persistencia
+
+- [cargador_sql_server.py](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/src/dash_bi/persistencia/cargador_sql_server.py)
+  - Construye la conexión a SQL Server.
+  - Inserta países, zonas horarias y ubicaciones.
+  - Inserta unidades.
+  - Inserta filas diarias y horarias.
+
+### Aplicación ETL
+
+- [etl_clima_app.py](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/src/dash_bi/aplicacion/etl_clima_app.py)
+  - Orquesta el flujo completo del proceso ETL.
+  - Integra argumentos, catálogo, API, transformación y persistencia.
+
+### Pruebas
+
+- [tests](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/tests)
+  - Incluye pruebas base para:
+    - parsing de coordenadas
+    - carga de catálogo
+    - transformación de payloads
+    - construcción de URLs
+
+## Flujo ETL
+
+```mermaid
+flowchart LR
+    A[GestorArgumentos] --> B[GestorUbicaciones]
+    B --> C[ClienteClima]
+    C --> D[TransformadorClima]
+    D --> E[CargadorSqlServer]
+    E --> F[WeatherBD]
+    G[EtlClimaApp] --> A
+    G --> B
+    G --> C
+    G --> D
+    G --> E
+```
+
+### Resumen del flujo
+
+1. Se leen los argumentos de consola.
+2. Se carga el catálogo JSON o se interpretan coordenadas manuales.
+3. Se construye la URL para Open-Meteo con la zona horaria correcta.
+4. Se consulta la API.
+5. Se transforma la respuesta en filas diarias y horarias.
+6. Se insertan o actualizan catálogos y tablas de clima en SQL Server.
+7. El dashboard de Power BI consume la base de datos resultante.
 
 ## Modelo de Datos
 
-El modelo relacional actual separa país, zona horaria, ubicación y observaciones meteorológicas:
+La base de datos separa país, zona horaria, ubicación y observaciones meteorológicas:
 
 ```mermaid
-erDiagram
+Diagrama de tablas
     Country {
         int CountryID PK
         nvarchar CountryName UK
@@ -79,51 +207,41 @@ erDiagram
         int LocationID FK
         datetime2 Timestamp
     }
+    
+    
+    
+    
+Relaciones en el modelo:
 
-    Country ||--o{ Location : contains
-    Timezone ||--o{ Location : uses
-    Location ||--o{ DailyWeather : has
-    Location ||--o{ HourlyWeather : has
-```
+- `Country[CountryID] -> Location[CountryID]`
+- `Timezone[TimezoneID] -> Location[TimezoneID]`
+- `Location[LocationID] -> DailyWeather[LocationID]`
+- `Location[LocationID] -> HourlyWeather[LocationID]`
+ ```
 
-## Flujo ETL
 
-El script [ETL_clima.py](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/ETL_clima.py):
-
-- Lee ubicaciones desde `locations.json`.
-- Construye la URL de Open-Meteo con la zona horaria correcta por ubicación.
-- Descarga datos diarios y horarios.
-- Inserta o actualiza:
-  - `Country`
-  - `Timezone`
-  - `Location`
-  - `DailyUnits`
-  - `HourlyUnits`
-  - `DailyWeather`
-  - `HourlyWeather`
-- Reemplaza filas por fecha/hora para evitar duplicados en recargas.
-- Espera entre peticiones para no sobrecargar la API.
 
 ## Requisitos
 
 - Python 3.10 o superior
-- SQL Server local
+- SQL Server local o remoto
 - Driver ODBC para SQL Server
 - Power BI Desktop
-- Librería Python:
+
+Instalación de dependencias:
 
 ```bash
-pip install pyodbc
+pip install -r requirements.txt
 ```
 
 ## Configuración de Base de Datos
 
 1. Abre [WeatherDB.sql](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/WeatherDB.sql) en SQL Server Management Studio.
-2. Ejecuta el script para crear `WeatherBD`.
+2. Ejecuta el script para crear la base `WeatherBD`.
 
 ## Catálogo de Ubicaciones
 
-El archivo [locations.json](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/locations.json) define cada ubicación con esta estructura:
+El archivo [locations.json](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/locations.json) contiene entradas con esta estructura:
 
 ```json
 {
@@ -145,45 +263,51 @@ Campos requeridos:
 - `latitude`
 - `longitude`
 
-## Ejecución del ETL
+## Ejecución
 
-Listar ubicaciones:
+### Listar ubicaciones
 
 ```bash
 python ETL_clima.py --list-locations
 ```
 
-Cargar todas las ubicaciones del catálogo:
+### Cargar todas las ubicaciones del catálogo
 
 ```bash
 python ETL_clima.py --all-locations
 ```
 
-Cargar ubicaciones específicas:
+### Cargar ubicaciones específicas
 
 ```bash
 python ETL_clima.py --location san_jose_cr,berlin,madrid_es
 ```
 
-Cargar coordenadas manuales:
+### Cargar coordenadas manuales en formato simple
 
 ```bash
-python ETL_clima.py --coordinates "9.93,-84.09;40.71,-74.00"
+python ETL_clima.py --coordinates "9.9281,-84.0907;48.8566,2.3522"
 ```
 
-Cambiar el rango de consulta:
+### Cargar coordenadas manuales en formato detallado
+
+```bash
+python ETL_clima.py --coordinates "lat=9.9281,lon=-84.0907,city=San Jose,country=Costa Rica,timezone=America/Costa_Rica"
+```
+
+### Cambiar rango de consulta
 
 ```bash
 python ETL_clima.py --all-locations --past-days 30 --forecast-days 7
 ```
 
-Usar otra instancia de SQL Server:
+### Usar otra instancia de SQL Server
 
 ```bash
 python ETL_clima.py --server .\\SQLEXPRESS --database WeatherBD
 ```
 
-Con autenticación SQL:
+### Usar autenticación SQL
 
 ```bash
 python ETL_clima.py --server localhost --database WeatherBD --username sa --password TuClave
@@ -193,8 +317,8 @@ python ETL_clima.py --server localhost --database WeatherBD --username sa --pass
 
 - `--all-locations`: procesa todas las ubicaciones del catálogo.
 - `--location`: procesa una o varias claves del JSON.
-- `--coordinates`: permite consultar ubicaciones no definidas en el catálogo.
-- `--locations-file`: cambia el archivo JSON de ubicaciones.
+- `--coordinates`: permite coordenadas simples o detalladas sin depender del JSON.
+- `--locations-file`: cambia el archivo de ubicaciones a utilizar.
 - `--past-days`: días históricos a consultar.
 - `--forecast-days`: días futuros a consultar.
 - `--request-delay`: pausa entre peticiones al API.
@@ -202,59 +326,11 @@ python ETL_clima.py --server localhost --database WeatherBD --username sa --pass
 
 ## Power BI
 
-El dashboard [Dashboard_Clima_AD.pbix](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/Dashboard_Clima_AD.pbix) consume la base `WeatherBD` y permite analizar:
+El archivo [Dashboard_Clima_AD.pbix](/C:/Users/d3smo/Desktop/CUC/Almacenes%20de%20datos/Dash_BI/Dashboard_Clima_AD.pbix) consume la base `WeatherBD` y permite analizar:
 
 - variables climáticas por ubicación
 - comportamiento diario y horario
 - amaneceres y anocheceres
 - comparativas por país, ciudad y zona horaria
 
-Recomendaciones para Power BI:
 
-- Verifica que `Date`, `Timestamp`, `sunrise` y `sunset` lleguen como `Fecha` o `Fecha/Hora`.
-- Si actualizas el esquema SQL, refresca el modelo en Power BI.
-- Usa relaciones:
-  - `Country[CountryID] -> Location[CountryID]`
-  - `Timezone[TimezoneID] -> Location[TimezoneID]`
-  - `Location[LocationID] -> DailyWeather[LocationID]`
-  - `Location[LocationID] -> HourlyWeather[LocationID]`
-
-## Validación Recomendada
-
-Después de una carga, conviene revisar:
-
-- que no todas las ubicaciones estén en `GMT`
-- que `Timezone` tenga abreviaciones correctas
-- que `DailyWeather` y `HourlyWeather` tengan datos por más de una ubicación
-- que Power BI reconozca correctamente las columnas temporales
-
-Ejemplo de chequeo SQL:
-
-```sql
-SELECT
-    c.CountryName,
-    l.CityName,
-    tz.TimezoneName,
-    tz.TimezoneAbbreviation
-FROM Location l
-JOIN Country c ON c.CountryID = l.CountryID
-JOIN Timezone tz ON tz.TimezoneID = l.TimezoneID
-ORDER BY c.CountryName, l.CityName;
-```
-
-## Estado del Proyecto
-
-El proyecto ya incluye:
-
-- base SQL estructurada para ubicaciones, países y zonas horarias
-- ETL configurable por catálogo JSON
-- soporte para múltiples ubicaciones y coordenadas manuales
-- integración con Power BI
-
-## Próximas Mejoras Sugeridas
-
-- agregar `requirements.txt`
-- crear vistas SQL para consumo analítico
-- automatizar cargas periódicas
-- incluir validaciones de calidad de datos
-- separar ambientes `dev` y `prod`

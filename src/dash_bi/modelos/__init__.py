@@ -1,0 +1,1 @@
+"""Modelos simples del ETL."""
