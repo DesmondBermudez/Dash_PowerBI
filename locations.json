@@ -1,0 +1,254 @@
+{
+   "tokyo_jp": {
+    "city": "Tokyo",
+    "country": "Japan",
+    "timezone": "Asia/Tokyo",
+    "latitude": 35.6762,
+    "longitude": 139.6503
+  },
+  "sydney_au": {
+    "city": "Sydney",
+    "country": "Australia",
+    "timezone": "Australia/Sydney",
+    "latitude": -33.8688,
+    "longitude": 151.2093
+  },
+  "auckland_nz": {
+    "city": "Auckland",
+    "country": "New Zealand",
+    "timezone": "Pacific/Auckland",
+    "latitude": -36.8509,
+    "longitude": 174.7645
+  },
+  "dubai_ae": {
+    "city": "Dubai",
+    "country": "United Arab Emirates",
+    "timezone": "Asia/Dubai",
+    "latitude": 25.2048,
+    "longitude": 55.2708
+  },
+  "nairobi_ke": {
+    "city": "Nairobi",
+    "country": "Kenya",
+    "timezone": "Africa/Nairobi",
+    "latitude": -1.2921,
+    "longitude": 36.8219
+  },
+  "cape_town_za": {
+    "city": "Cape Town",
+    "country": "South Africa",
+    "timezone": "Africa/Johannesburg",
+    "latitude": -33.9249,
+    "longitude": 18.4241
+  },
+  "london_gb": {
+    "city": "London",
+    "country": "United Kingdom",
+    "timezone": "Europe/London",
+    "latitude": 51.5072,
+    "longitude": -0.1276
+  },
+  "reykjavik_is": {
+    "city": "Reykjavik",
+    "country": "Iceland",
+    "timezone": "Atlantic/Reykjavik",
+    "latitude": 64.1466,
+    "longitude": -21.9426
+  },
+  "honolulu_us": {
+    "city": "Honolulu",
+    "country": "United States",
+    "timezone": "Pacific/Honolulu",
+    "latitude": 21.3099,
+    "longitude": -157.8581
+  },
+  "anchorage_us": {
+    "city": "Anchorage",
+    "country": "United States",
+    "timezone": "America/Anchorage",
+    "latitude": 61.2181,
+    "longitude": -149.9003
+  },
+  "los_angeles_us": {
+    "city": "Los Angeles",
+    "country": "United States",
+    "timezone": "America/Los_Angeles",
+    "latitude": 34.0522,
+    "longitude": -118.2437
+  },
+  "chicago_us": {
+    "city": "Chicago",
+    "country": "United States",
+    "timezone": "America/Chicago",
+    "latitude": 41.8781,
+    "longitude": -87.6298
+  },
+  "sao_paulo_br": {
+    "city": "Sao Paulo",
+    "country": "Brazil",
+    "timezone": "America/Sao_Paulo",
+    "latitude": -23.5505,
+    "longitude": -46.6333
+  },
+  "st_johns_ca": {
+    "city": "St. John's",
+    "country": "Canada",
+    "timezone": "America/St_Johns",
+    "latitude": 47.5615,
+    "longitude": -52.7126
+  },
+  "berlin": {
+    "city": "Berlin",
+    "country": "Germany",
+    "timezone": "Europe/Berlin",
+    "latitude": 52.52,
+    "longitude": 13.41
+  },
+  "san_jose_cr": {
+    "city": "San Jose",
+    "country": "Costa Rica",
+    "timezone": "America/Costa_Rica",
+    "latitude": 9.9281,
+    "longitude": -84.0907
+  },
+  "alajuela_cr": {
+    "city": "Alajuela",
+    "country": "Costa Rica",
+    "timezone": "America/Costa_Rica",
+    "latitude": 10.0163,
+    "longitude": -84.2116
+  },
+  "cartago_cr": {
+    "city": "Cartago",
+    "country": "Costa Rica",
+    "timezone": "America/Costa_Rica",
+    "latitude": 9.8644,
+    "longitude": -83.9194
+  },
+  "heredia_cr": {
+    "city": "Heredia",
+    "country": "Costa Rica",
+    "timezone": "America/Costa_Rica",
+    "latitude": 9.998,
+    "longitude": -84.1165
+  },
+  "liberia_cr": {
+    "city": "Liberia",
+    "country": "Costa Rica",
+    "timezone": "America/Costa_Rica",
+    "latitude": 10.635,
+    "longitude": -85.4377
+  },
+  "puntarenas_cr": {
+    "city": "Puntarenas",
+    "country": "Costa Rica",
+    "timezone": "America/Costa_Rica",
+    "latitude": 9.9763,
+    "longitude": -84.8384
+  },
+  "limon_cr": {
+    "city": "Limon",
+    "country": "Costa Rica",
+    "timezone": "America/Costa_Rica",
+    "latitude": 9.9907,
+    "longitude": -83.035
+  },
+  "guanacaste_cr": {
+    "city": "Guanacaste",
+    "country": "Costa Rica",
+    "timezone": "America/Costa_Rica",
+    "latitude": 10.6346,
+    "longitude": -85.4407
+  },
+  "panama_city_pa": {
+    "city": "Panama City",
+    "country": "Panama",
+    "timezone": "America/Panama",
+    "latitude": 8.9824,
+    "longitude": -79.5199
+  },
+  "david_pa": {
+    "city": "David",
+    "country": "Panama",
+    "timezone": "America/Panama",
+    "latitude": 8.4273,
+    "longitude": -82.4308
+  },
+  "managua_ni": {
+    "city": "Managua",
+    "country": "Nicaragua",
+    "timezone": "America/Managua",
+    "latitude": 12.114,
+    "longitude": -86.2362
+  },
+  "san_salvador_sv": {
+    "city": "San Salvador",
+    "country": "El Salvador",
+    "timezone": "America/El_Salvador",
+    "latitude": 13.6929,
+    "longitude": -89.2182
+  },
+  "tegucigalpa_hn": {
+    "city": "Tegucigalpa",
+    "country": "Honduras",
+    "timezone": "America/Tegucigalpa",
+    "latitude": 14.0723,
+    "longitude": -87.1921
+  },
+  "guatemala_city_gt": {
+    "city": "Guatemala City",
+    "country": "Guatemala",
+    "timezone": "America/Guatemala",
+    "latitude": 14.6349,
+    "longitude": -90.5069
+  },
+  "mexico_city_mx": {
+    "city": "Mexico City",
+    "country": "Mexico",
+    "timezone": "America/Mexico_City",
+    "latitude": 19.4326,
+    "longitude": -99.1332
+  },
+  "bogota_co": {
+    "city": "Bogota",
+    "country": "Colombia",
+    "timezone": "America/Bogota",
+    "latitude": 4.711,
+    "longitude": -74.0721
+  },
+  "lima_pe": {
+    "city": "Lima",
+    "country": "Peru",
+    "timezone": "America/Lima",
+    "latitude": -12.0464,
+    "longitude": -77.0428
+  },
+  "quito_ec": {
+    "city": "Quito",
+    "country": "Ecuador",
+    "timezone": "America/Guayaquil",
+    "latitude": -0.1807,
+    "longitude": -78.4678
+  },
+  "buenos_aires_ar": {
+    "city": "Buenos Aires",
+    "country": "Argentina",
+    "timezone": "America/Argentina/Buenos_Aires",
+    "latitude": -34.6037,
+    "longitude": -58.3816
+  },
+  "madrid_es": {
+    "city": "Madrid",
+    "country": "Spain",
+    "timezone": "Europe/Madrid",
+    "latitude": 40.4168,
+    "longitude": -3.7038
+  },
+  "new_york_us": {
+    "city": "New York",
+    "country": "United States",
+    "timezone": "America/New_York",
+    "latitude": 40.7128,
+    "longitude": -74.006
+  }
+}
